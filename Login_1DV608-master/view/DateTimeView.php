@@ -16,7 +16,7 @@ class DateTimeView {
 		$time = date('H:i:s');
 		
 		$date = getdate();
-		$timeString = "$date[weekday] the $day of $date[month] $date[year], The time is $time"; //$date[hours]:$date[minutes]:$date[seconds]";
+		$timeString = "$date[weekday], the $day of $date[month] $date[year], The time is $time"; //$date[hours]:$date[minutes]:$date[seconds]";
 
 		return '<p>' . $timeString . '</p>';
 	}

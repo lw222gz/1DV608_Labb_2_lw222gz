@@ -9,8 +9,11 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
-
 	
+	//used to give the correct value to $message in response()
+	private static $ErrorMess = '';
+	
+
 
 	/**
 	 * Create HTTP response
@@ -20,7 +23,7 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
-		$message = '';
+		$message = self::$ErrorMess;
 		
 		$response = $this->generateLoginFormHTML($message);
 		//$response .= $this->generateLogoutButtonHTML($message);
@@ -54,7 +57,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="Admin" />
 
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
@@ -69,8 +72,46 @@ class LoginView {
 	}
 	
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
-	private function getRequestUserName() {
-		//RETURN REQUEST VARIABLE: USERNAME
+	
+	//returns user login name
+	public function getRequestUserName() {
+		//isset doesnt work for me? Ask during a lecture
+		
+		//$userName = str_replace(' ', '', $_POST['LoginView::UserName']);
+		
+		//checks if the user name box is empty
+		if(!empty($_POST['LoginView::UserName'])){
+			return  $_POST['LoginView::UserName'];
+		}
+		else{
+			//sets an appropriate error message
+			self::$ErrorMess = 'Username is missing';
+		}
+		return null;
 	}
 	
+	
+	
+	//returns user password
+	public function getRequestUserPassword(){
+		//$pass = str_replace(' ', '', $_POST['LoginView::Password']);
+		
+		//checks if the password box is empty
+		if(!empty($_POST['LoginView::Password'])){
+			return $_POST['LoginView::Password'];
+		}
+		else{
+			//sets an appropriate error message
+			self::$ErrorMess = 'Password is missing';
+		}
+		return null;
+	}
+	
+	//checks if the login button has been pressed.
+	public function hasPressedSubmit(){
+		if(isset($_POST['LoginView::Login'])){
+			return true;
+		}
+		return false;
+	}
 }
