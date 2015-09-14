@@ -10,10 +10,15 @@ class LoginView {
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
 	
-	//used to give the correct value to $message in response()
-	private static $ErrorMess = '';
+	//Varibel to set the username input value, if $_POST[self::$name] is used an Error notice is given at the first run of the page.
+	private static $SaveUserName = '';
 	
+	//refrence object to the class LoginModel, only used as Read-Only
+	private $lm;
 
+	public function __construct($lm){
+		$this -> lm = $lm;
+	}
 
 	/**
 	 * Create HTTP response
@@ -23,10 +28,21 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
-		$message = self::$ErrorMess;
+		//gets the current status message from the model class.
+		$message = $this -> lm -> getStatusMessage();
 		
-		$response = $this->generateLoginFormHTML($message);
-		//$response .= $this->generateLogoutButtonHTML($message);
+		//saves the value here.
+		self::$SaveUserName = self::getRequestUserName();
+		
+		//If logged in only the logout HTML is shown
+		if($this -> lm -> getLoginStatus())
+		{
+			$response = $this->generateLogoutButtonHTML($message);
+		}
+		//else show login HTML
+		else {
+			$response = $this->generateLoginFormHTML($message);
+		}
 		return $response;
 	}
 
@@ -57,7 +73,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="Admin" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="'. self::$SaveUserName .'" />
 
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
@@ -75,43 +91,32 @@ class LoginView {
 	
 	//returns user login name
 	public function getRequestUserName() {
-		//isset doesnt work for me? Ask during a lecture
-		
-		//$userName = str_replace(' ', '', $_POST['LoginView::UserName']);
-		
-		//checks if the user name box is empty
-		if(!empty($_POST['LoginView::UserName'])){
-			return  $_POST['LoginView::UserName'];
+		if(isset($_POST[self::$name])) {
+			return $_POST[self::$name];
 		}
-		else{
-			//sets an appropriate error message
-			self::$ErrorMess = 'Username is missing';
-		}
-		return null;
 	}
-	
-	
-	
+
 	//returns user password
 	public function getRequestUserPassword(){
-		//$pass = str_replace(' ', '', $_POST['LoginView::Password']);
-		
-		//checks if the password box is empty
-		if(!empty($_POST['LoginView::Password'])){
-			return $_POST['LoginView::Password'];
+		if(isset($_POST[self::$password])){
+			return $_POST[self::$password];
 		}
-		else{
-			//sets an appropriate error message
-			self::$ErrorMess = 'Password is missing';
-		}
-		return null;
 	}
 	
 	//checks if the login button has been pressed.
 	public function hasPressedSubmit(){
-		if(isset($_POST['LoginView::Login'])){
+		if(isset($_POST[self::$login])){
 			return true;
 		}
 		return false;
 	}
+	
+	//checks if the logout button has been pressed
+	public function hasPressedLogOut(){
+		if(isset($_POST[self::$logout])){
+			return true;
+		}
+		return false;
+	}
+	
 }
