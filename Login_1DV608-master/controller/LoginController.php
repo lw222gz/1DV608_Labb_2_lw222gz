@@ -26,11 +26,33 @@ class LoginController {
         //Has the user pressed login? CheckLoginInfo function
         if ($this -> v -> hasPressedSubmit())
         {
-            $this -> lm -> CheckLoginInfo($this -> v -> getRequestUserName(), $this -> v -> getRequestUserPassword());
+            try{
+               //if(
+                    $this -> lm -> CheckLoginInfo($this -> v -> getRequestUserName(), $this -> v -> getRequestUserPassword());
+
+                    //On the original log in, it shows the Welcome message
+                    $this -> v -> JustLoggedIn();
+            }
+            catch(Exception $e){
+                //catches an error are uses the message as a status message
+                $this -> v -> setStatusMessage($e);
+            }
+            
         }
+        
         //Has the user pressed logout? Run Logout function
         if($this -> v -> hasPressedLogOut()){
-            $this -> lm -> LogOut();
+            //if(
+            try {
+                $this -> lm -> LogOut();
+                
+                //on the original logout it shows the bye bye message
+                $this -> v -> JustLoggedOut();
+            }
+            catch(Exception $e){
+                //catches an error are uses the message as a status message
+                $this -> v -> setStatusMessage($e);
+            }
         }
     }
     

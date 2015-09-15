@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 class LoginView {
 	private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
@@ -12,6 +14,9 @@ class LoginView {
 	
 	//Varibel to set the username input value, if $_POST[self::$name] is used an Error notice is given at the first run of the page.
 	private static $SaveUserName = '';
+	
+	private static $StatusMessage = '';
+	
 	
 	//refrence object to the class LoginModel, only used as Read-Only
 	private $lm;
@@ -28,9 +33,10 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
-		//gets the current status message from the model class.
-		$message = $this -> lm -> getStatusMessage();
+		//Sets the current status message
+		$message = self::$StatusMessage;
 		
+			
 		//saves the value here.
 		self::$SaveUserName = self::getRequestUserName();
 		
@@ -118,5 +124,23 @@ class LoginView {
 		}
 		return false;
 	}
+	
+	//gets the message the error threw and sets it to the status message
+	public function setStatusMessage($e) {
+		self::$StatusMessage = $e -> getMessage();
+	}
+	
+	//Sets the Welcome message when the user just logged in
+	public function JustLoggedIn(){
+
+			self::$StatusMessage = 'Welcome';
+
+	}
+	
+	//Sets the Bye bye! message when the user just logged out
+	public function JustLoggedOut(){
+		self::$StatusMessage = 'Bye bye!';
+	}
+	
 	
 }

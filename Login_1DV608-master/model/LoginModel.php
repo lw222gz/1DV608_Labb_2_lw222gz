@@ -9,10 +9,6 @@ class LoginModel {
     private static $CorrectUserN = "Admin";
     private static $CorrectPassword = "Password";
     
-    private static $Message = '';
-    
-    
-    
     
     public function __construct(){
         //When page is refreshed, the user stays logged in.
@@ -21,40 +17,37 @@ class LoginModel {
         }
     }
     
-    //Takes the given data and executes a proper response message
+    //Takes the given data and throws a proper Exception if anything is wrong, 
+    //otherwise returns @boolean
     public function CheckLoginInfo($UserN, $Pass) {
-        //Trim both 
+        //Trims both user inputs 
         $UserN = trim($UserN);
         $Pass = trim($Pass);
         
-        
+        //When an Exception is thrown, the controller will pick that exception up, 
+        //pass it on to the view that uses the message in the exception to present it to the user.
         if(empty($UserN)){
-            self::$Message = 'Username is missing';
+
+            throw new Exception('Username is missing');
         }
-        else if (empty($Pass)){
-            self::$Message = 'Password is missing';
+        else if(empty($Pass)){
+            throw new Exception('Password is missing');
         }
-        else if($UserN !== self::$CorrectUserN || $Pass !== self::$CorrectPassword) {
-            self::$Message = 'Wrong name or password';
-        }
-        //If all the above are are false, the user has given the correct info and gets logged in into the 'system'
-        else {
-            //handels the 'Welcome' message
+        else if($UserN === self::$CorrectUserN && $Pass === self::$CorrectPassword){
+            //If this session allready exsists and is true, then it's a repost, 
+            //if it's a repost I throw an empty error to remove the StatusMessage
             if(isset($_SESSION["isLoggedin"]) && $_SESSION["isLoggedin"] == true){
-                self::$Message = '';
+                throw new Exception();
             }
-            else {
-                self::$Message = 'Welcome';
-            }
-            //sets login status
+            //Otherwise it's the origninal login and the user will be logged in for the first time with the welcome message
             $_SESSION["isLoggedin"] = true;
         }
+        //If none above, the user entered wrong credentials.
+        else {
+            throw new Exception('Wrong name or password');
+        }
     }
-    
-    //returns status message
-    public function getStatusMessage() {
-        return self::$Message;
-    }
+
     
     //@returns boolean, true if logged in, false if not logged in.
     public function getLoginStatus(){
@@ -68,17 +61,13 @@ class LoginModel {
     
     //Logs the user out of the 'system'
     public function LogOut(){
-        if(isset($_SESSION["isLoggedin"])){
-            //Handels the 'Bye bye!' message
-            if($_SESSION["isLoggedin"] == false){
-                self::$Message = '';
-            }
-            else {
-                self::$Message = 'Bye bye!';
-            }
-            //Logs the user out and destroys the session
-            $_SESSION["isLoggedin"] = false;
-            session_destroy();
+        //If this session allready exsists and it's value is false, then it's a repost, 
+        //if it's a repost I throw an empty error to remove the StatusMessage
+        if (isset($_SESSION["isLoggedin"]) && !$_SESSION["isLoggedin"]){
+            throw new Exception();
         }
+        
+        //Otherwise the person just logged out and the bye bye message will be shown.
+        $_SESSION["isLoggedin"] = false;
     }
 }
