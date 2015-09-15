@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 class LoginView {
 	private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
