@@ -1,7 +1,5 @@
 <?php
 
-//session start
-session_start();
 
 class LoginModel {
     
@@ -49,7 +47,8 @@ class LoginModel {
     }
 
     
-    //@returns boolean, true if logged in, false if not logged in.
+    //@returns boolean, 
+    //true if logged in, false if not logged in.
     public function getLoginStatus(){
         if(isset($_SESSION["isLoggedin"])){
             return $_SESSION["isLoggedin"];

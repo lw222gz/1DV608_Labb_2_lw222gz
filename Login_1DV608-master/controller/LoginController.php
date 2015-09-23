@@ -13,8 +13,6 @@ class LoginController {
     private $UserN;
     private $Pass;
     
-    private $LogInValidation;
-    
     //sets the object references.
     public function __construct($v, $lm){
         $this -> v = $v;

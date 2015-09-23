@@ -130,9 +130,7 @@ class LoginView {
 	
 	//Sets the Welcome message when the user just logged in
 	public function JustLoggedIn(){
-
-			self::$StatusMessage = 'Welcome';
-
+		self::$StatusMessage = 'Welcome';
 	}
 	
 	//Sets the Bye bye! message when the user just logged out
