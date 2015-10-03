@@ -138,5 +138,10 @@ class LoginView {
 		self::$StatusMessage = 'Bye bye!';
 	}
 	
+	public function setNewUserName($newUser){
+		self::$SaveUserName = $newUser;
+		self::$StatusMessage = "Registered new user.";
+	}
+	
 	
 }
