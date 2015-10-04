@@ -1,19 +1,19 @@
 <?php
 
 class User{
-    private $userName;
-    private $userPassword;
+    private $Name;
+    private $Password;
     
     public function __construct($userName, $password){
-        $this -> userName = $userName;
-        $this -> userPassword = $password;
+        $this -> Name = $userName;
+        $this -> Password = $password;
     }
     
     public function getUserName(){
-        return $this -> userName;
+        return $this -> Name;
     }
     
     public function getHasedPassword(){
-        return $this -> userPassword;
+        return $this -> Password;
     }
 }

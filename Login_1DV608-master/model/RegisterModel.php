@@ -24,11 +24,14 @@ class RegisterModel {
     private function ValidateData($Username, $Password, $PasswordCheck){
         //TODO:Check if $Username exists in "database"
         $RegisterdUsers = self::$UserDAL -> getUnserializedUsers();
-        foreach($RegisterdUsers as $Ruser){
-            if($Username == $Ruser -> getUserName()){
-                throw new Exception("User exists, pick another username.");
+        if($RegisterdUsers != false){
+            foreach($RegisterdUsers as $Ruser){
+                if($Username == $Ruser -> getUserName()){
+                    throw new Exception("User exists, pick another username.");
+                }
             }
         }
+        
         //username has to be ATLEAST 3 chaacters and password has to be ATLEAST 6 characters long.
         //user name may not contain HTML tags (4.9)
         if($Username != strip_tags($Username)){

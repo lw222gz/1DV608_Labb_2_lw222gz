@@ -16,7 +16,7 @@ class RegisterView{
     
     public function RegisterLayout(){
         return '
-			<form method="post" action="?"> 
+			<form method="post"> 
 				<fieldset>
 					<legend>Register - enter the fields below</legend>
 					<p id="' . self::$messageID . '">' . self::$message . '</p>
