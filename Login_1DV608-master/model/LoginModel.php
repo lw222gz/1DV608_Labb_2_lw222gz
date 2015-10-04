@@ -26,6 +26,10 @@ class LoginModel {
         
         $RegisterdUsers = self::$UserDAL -> getUnserializedUsers();
         
+        if($RegisterdUsers == false){
+            throw new Exception("No registerd users yet");
+        }
+        
         //When an Exception is thrown, the controller will pick that exception up, 
         //pass it on to the view that uses the message in the exception to present it to the user.
         if(empty($UserN)){

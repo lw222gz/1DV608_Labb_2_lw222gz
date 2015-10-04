@@ -4,7 +4,7 @@ class UserDAL {
     
     //private static $Users = array();
     
-    private static $path = "Data/database.bin";
+    private static $path = "../Data/database.bin";
     
     public function __construct(){
         //checks if file exists, otherwise it's created

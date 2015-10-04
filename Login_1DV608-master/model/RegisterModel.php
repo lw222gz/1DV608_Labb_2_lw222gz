@@ -7,7 +7,6 @@ class RegisterModel {
     private static $UserDAL;
     
     private static $dbFile;
-    private static $path = "Data/database.txt";
     private static $FileContents;
     
     public function __construct($DAL){
