@@ -49,7 +49,7 @@ class RegisterModel {
         if(strlen($Username) < 3){
             throw new Exception("Username has too few characters, at least 3 characters.");
         }
-        if(strlen($Password) <= 6){
+        if(strlen($Password) < 6){
             throw new Exception("Password has too few characters, at least 6 characters.");
         }
         

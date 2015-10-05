@@ -11,10 +11,6 @@ class UserDAL {
         if(!file_exists(self::$path)){
             self::$dbFile = fopen(self::$path, "w");
         }
-        /*$user = array();
-        array_push($user, new User("Admin", "Password"));
-        $serialise = serialize($user);
-        file_put_contents(self::$path, $serialise);*/
     }
     
     public function AddUser($userName, $hasedPassword){

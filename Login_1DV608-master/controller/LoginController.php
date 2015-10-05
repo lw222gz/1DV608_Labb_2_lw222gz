@@ -39,7 +39,11 @@ class LoginController {
                 
                 //CONTINUE, the redirect is working, but the username is not saved. Also, the CSquiz does not pick up the redirect, bugg or something with my page?
                 $this -> v -> setNewUserName($this -> rv -> getRequestUserName());
-                header("Location: ?");
+                //var_dump($_SERVER);
+                //$actualURL = $_SERVER[HTTP_HOST].$_SERVER[PHP_SELF];
+                
+                header("Location: /Login_1DV608-master/");
+                //var_dump($actualURL);
             }
             catch (Exception $e){
                 $this -> rv -> setErrorMessage($e);
