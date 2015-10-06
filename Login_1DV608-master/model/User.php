@@ -16,4 +16,5 @@ class User{
     public function getHasedPassword(){
         return $this -> Password;
     }
+    
 }
