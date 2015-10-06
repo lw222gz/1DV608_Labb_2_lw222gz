@@ -31,12 +31,18 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
+		
+		if(isset($_SESSION["newUser"])){
+	        self::$SaveUserName = $_SESSION["newUser"];
+	        self::$StatusMessage = "Registered new user.";
+	        unset($_SESSION["newUser"]);
+        }
+		
 		//Sets the current status message
 		$message = self::$StatusMessage;
 		
-			
-		//saves the value here.
-		self::$SaveUserName = self::getRequestUserName();
+
+		
 		
 		//If logged in only the logout HTML is shown
 		if($this -> lm -> getLoginStatus())
@@ -96,6 +102,8 @@ class LoginView {
 	//returns user login name
 	public function getRequestUserName() {
 		if(isset($_POST[self::$name])) {
+			//saves the value here.
+			self::$SaveUserName = $_POST[self::$name];
 			return $_POST[self::$name];
 		}
 	}
@@ -138,7 +146,7 @@ class LoginView {
 		self::$StatusMessage = 'Bye bye!';
 	}
 	
-	public function setNewUserName($newUser){
+	public function setNewUser($newUser){
 		self::$SaveUserName = $newUser;
 		self::$StatusMessage = "Registered new user.";
 	}

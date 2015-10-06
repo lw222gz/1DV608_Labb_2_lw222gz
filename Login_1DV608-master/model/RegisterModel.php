@@ -17,7 +17,7 @@ class RegisterModel {
         
         if (self::ValidateData($Username, $Password, $PasswordCheck)){
             //hashing the password before going to the DAL just to make sure no bugg in the DAL will cause an unhased password to be stored.
-            self::$UserDAL -> AddUser($Username, sha1(file_get_contents("../Data/salt.txt")+$Password));
+            self::$UserDAL -> AddUser($Username, sha1(file_get_contents("../Data/salt.txt").$Password));
         }
     }
     

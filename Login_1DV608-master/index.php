@@ -35,10 +35,8 @@ $rv = new RegisterView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
 
-
 $loginCont = new LoginController($v, $lm, $rv, $rm);
 $loginCont -> init();
-
 
 $lv->render($lm -> getLoginStatus(), $v, $dtv, $rv);
 

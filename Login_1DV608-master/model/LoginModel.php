@@ -3,9 +3,6 @@
 
 class LoginModel {
     
-    //Correct login info
-    private static $CorrectUserN = "Admin";
-    private static $CorrectPassword = "Password";
     private static $UserDAL;
     
     
@@ -20,7 +17,7 @@ class LoginModel {
     //Takes the given data and throws a proper Exception if anything is wrong, 
     //otherwise returns @boolean
     public function CheckLoginInfo($UserN, $Pass) {
-        //Trims both user inputs 
+        
         $UserN = trim($UserN);
         $Pass = trim($Pass);
         
@@ -48,7 +45,7 @@ class LoginModel {
         //Otherwise it's the origninal login and the user credentials will be checked.
         foreach ($RegisterdUsers as $Ruser){
             if($UserN == $Ruser -> getUserName()){
-                if(sha1(file_get_contents("../Data/salt.txt")+$Pass) == $Ruser -> getHasedPassword()){
+                if(sha1(file_get_contents("../Data/salt.txt").$Pass) == $Ruser -> getHasedPassword()){
                     $_SESSION["isLoggedin"] = true;
                     break;
                 }

@@ -38,7 +38,8 @@ class LoginController {
                 //redirects registerd newly registed user to login
                 
                 //CONTINUE, the redirect is working, but the username is not saved. Also, the CSquiz does not pick up the redirect, bugg or something with my page?
-                $this -> v -> setNewUserName($this -> rv -> getRequestUserName());
+                $_SESSION["newUser"] = $this -> rv -> getRequestUserName();
+                //var_dump($_SESSION["newUser"]);
                 //var_dump($_SERVER);
                 //$actualURL = $_SERVER[HTTP_HOST].$_SERVER[PHP_SELF];
                 
