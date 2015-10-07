@@ -10,14 +10,15 @@ class UserDAL {
         //checks if file exists, otherwise it's created
         if(!file_exists(self::$path)){
             self::$dbFile = fopen(self::$path, "w");
+            fclose(self::$path);
         }
     }
     
     public function AddUser($userName, $hasedPassword){
 
         $Users = self::getUnserializedUsers();
+        //if Users == false, then the .bin is empty and it returns false, thus I make the varibel to an array manually so array_push dont crash the site.
         if($Users == false){
-            //if Users == false, then the .bin is empty and it returns false, thus I make the varibel to an array manually so arrau_push dont crash.
             $Users = array();
         }
         array_push($Users, new User($userName, $hasedPassword));

@@ -3,21 +3,15 @@
 
 class LoginController {
     
-    //loginview object
+    //LoginView object
     private $v;
-    
-    //loginmodel object
+    //LoginModel object
     private $lm;
-    
-    //registerview object.
+    //RegisterView object.
     private $rv;
-    
-    //register model object
+    //RegisterModel object
     private $rm;
-    
-    //input values
-    private $UserN;
-    private $Pass;
+
     
     //sets the object references.
     public function __construct($v, $lm, $rv, $rm){
@@ -29,59 +23,57 @@ class LoginController {
     
     //Initiate function that checks for button clicks.
     public function init(){
-        
-        if($this -> rv -> hasPressRegister()){
-            try
-            {
-                //validates input data and registers a user.
-                $this -> rm -> Register($this -> rv -> getRequestUserName(), $this -> rv -> getRequestPassword(), $this -> rv -> getRequestPasswordCheck());
-                //redirects registerd newly registed user to login
-                
-                //CONTINUE, the redirect is working, but the username is not saved. Also, the CSquiz does not pick up the redirect, bugg or something with my page?
-                $_SESSION["newUser"] = $this -> rv -> getRequestUserName();
-                //var_dump($_SESSION["newUser"]);
-                //var_dump($_SERVER);
-                //$actualURL = $_SERVER[HTTP_HOST].$_SERVER[PHP_SELF];
-                
-                header("Location: /Login_1DV608-master/");
-                //var_dump($actualURL);
-            }
-            catch (Exception $e){
-                $this -> rv -> setErrorMessage($e);
-            }
-        }
-        
-        //Has the user pressed login? CheckLoginInfo function
-        if ($this -> v -> hasPressedSubmit())
-        {
-            try{
-                    $this -> lm -> CheckLoginInfo($this -> v -> getRequestUserName(), $this -> v -> getRequestUserPassword());
-
-                    //On the original log in, it shows the Welcome message
-                    $this -> v -> JustLoggedIn();
-                    
-            }
-            catch(Exception $e){
-                //catches an error are uses the message as a status message
-                $this -> v -> setStatusMessage($e);
+        try {
+            if($this -> rv -> hasPressedRegister()){
+                self::RegisterNewUser();
             }
             
+            if ($this -> v -> hasPressedLogin())
+            {
+                self::LogIn();
+            }
+            
+            else if($this -> v -> hasPressedLogOut()){
+                self::LogOut();
+            }
         }
+        catch (LoginModelException $e){
+            $this -> v -> setStatusMessage($e);
+        }
+        catch (RegisterModelException $e){
+            $this -> rv -> setErrorMessage($e);
+        }
+        catch (Exception $e){
+            echo "An unhandeld exception was thrown. Please infrom...";
+        }
+    }
+    
+    
+   private function RegisterNewUser(){
+        //validates input data and registers a user.
+        $RegisterUserName = $this -> rv -> getRequestUserName();
+        $this -> rm -> Register($RegisterUserName, $this -> rv -> getRequestPassword(), $this -> rv -> getRequestPasswordCheck());
+
+        $_SESSION["newUser"] = $RegisterUserName;
         
-        //Has the user pressed logout? Run Logout function
-        else if($this -> v -> hasPressedLogOut()){
-            //if(
-            try {
-                $this -> lm -> LogOut();
-                
-                //on the original logout it shows the bye bye message
-                $this -> v -> JustLoggedOut();
-            }
-            catch(Exception $e){
-                //catches an error are uses the message as a status message
-                $this -> v -> setStatusMessage($e);
-            }
-        }
+        //redirects user to index page
+        header("Location: /Login_1DV608-master/");
+    }
+    
+    //tries to log in the user
+    private function LogIn(){
+        $this -> lm -> CheckLoginInfo($this -> v -> getRequestUserName(), $this -> v -> getRequestUserPassword());
+
+        //On the original log in, it shows the Welcome message
+        $this -> v -> JustLoggedIn();
+    }
+    
+    //Logs out the user
+    private function LogOut(){
+        $this -> lm -> LogOut();
+        
+        //on the original logout it shows the bye bye message
+        $this -> v -> JustLoggedOut();
     }
     
 }

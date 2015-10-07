@@ -31,7 +31,7 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
-		
+		//if a new user was just registerd, their name is set to defualt aswell as a new StatusMessage
 		if(isset($_SESSION["newUser"])){
 	        self::$SaveUserName = $_SESSION["newUser"];
 	        self::$StatusMessage = "Registered new user.";
@@ -40,10 +40,7 @@ class LoginView {
 		
 		//Sets the current status message
 		$message = self::$StatusMessage;
-		
 
-		
-		
 		//If logged in only the logout HTML is shown
 		if($this -> lm -> getLoginStatus())
 		{
@@ -96,27 +93,26 @@ class LoginView {
 			</form>
 		';
 	}
-	
-	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
+
 	
 	//returns user login name
 	public function getRequestUserName() {
 		if(isset($_POST[self::$name])) {
-			//saves the value here.
-			self::$SaveUserName = $_POST[self::$name];
-			return $_POST[self::$name];
+			//saves the value so if wrong password, the enterd username is still set
+			self::$SaveUserName = trim($_POST[self::$name]);
+			return self::$SaveUserName;
 		}
 	}
 
 	//returns user password
 	public function getRequestUserPassword(){
 		if(isset($_POST[self::$password])){
-			return $_POST[self::$password];
+			return trim($_POST[self::$password]);
 		}
 	}
 	
 	//checks if the login button has been pressed.
-	public function hasPressedSubmit(){
+	public function hasPressedLogin(){
 		if(isset($_POST[self::$login])){
 			return true;
 		}
@@ -145,11 +141,4 @@ class LoginView {
 	public function JustLoggedOut(){
 		self::$StatusMessage = 'Bye bye!';
 	}
-	
-	public function setNewUser($newUser){
-		self::$SaveUserName = $newUser;
-		self::$StatusMessage = "Registered new user.";
-	}
-	
-	
 }

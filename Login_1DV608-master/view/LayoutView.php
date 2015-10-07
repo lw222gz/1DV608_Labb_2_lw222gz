@@ -3,6 +3,7 @@
 
 class LayoutView {
   
+  //echos out all of the html
   public function render($isLoggedIn, LoginView $v, DateTimeView $dtv, $rv) {
     $html = '<!DOCTYPE html>
       <html>

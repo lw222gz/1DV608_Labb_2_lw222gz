@@ -61,7 +61,7 @@ class RegisterView{
         return null;
     }
     
-    public function hasPressRegister(){
+    public function hasPressedRegister(){
         if(isset($_POST[self::$RegisterID])){
             return trim($_POST[self::$RegisterID]);
         }

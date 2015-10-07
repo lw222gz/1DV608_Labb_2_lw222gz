@@ -6,9 +6,6 @@ class RegisterModel {
     
     private static $UserDAL;
     
-    private static $dbFile;
-    private static $FileContents;
-    
     public function __construct($DAL){
         self::$UserDAL = $DAL;
     }
@@ -17,50 +14,49 @@ class RegisterModel {
         
         if (self::ValidateData($Username, $Password, $PasswordCheck)){
             //hashing the password before going to the DAL just to make sure no bugg in the DAL will cause an unhased password to be stored.
-            self::$UserDAL -> AddUser($Username, sha1(file_get_contents("../Data/salt.txt").$Password));
+            //using the default salt+username to make sure that 2 people with diffrent usernames but same passwords dont get the same hash.
+            self::$UserDAL -> AddUser($Username, sha1(file_get_contents("../Data/salt.txt")+$Username.$Password));
         }
     }
     
     private function ValidateData($Username, $Password, $PasswordCheck){
-        //TODO:Check if $Username exists in "database"
+        //get all the users to check if username allready exists, if $RegisterdUsers == false then the .bin is empty
         $RegisterdUsers = self::$UserDAL -> getUnserializedUsers();
         if($RegisterdUsers != false){
             foreach($RegisterdUsers as $Ruser){
                 if($Username == $Ruser -> getUserName()){
-                    throw new Exception("User exists, pick another username.");
+                    throw new RegisterModelException("User exists, pick another username.");
                 }
             }
         }
         
-        //username has to be ATLEAST 3 chaacters and password has to be ATLEAST 6 characters long.
-        //user name may not contain HTML tags (4.9)
+        //character validation
         if($Username != strip_tags($Username)){
-            throw new Exception("Username contains invalid characters.");
+            throw new RegisterModelException("Username contains invalid characters.");
         }
         if($Password != strip_tags($Password)){
-            throw new Exception("Password contains invalid characters.");
+            throw new RegisterModelException("Password contains invalid characters.");
         }
         if($Password != $PasswordCheck){
-            throw new Exception("Passwords do not match.");
-        }
-        if(strlen($Username) < 3 && strlen($Password) <= 6){
-            throw new Exception("Username has too few characters, at least 3 characters. <br/>Password has too few characters, at least 6 characters.");
+            throw new RegisterModelException("Passwords do not match.");
         }
         if(strlen($Username) < 3){
-            throw new Exception("Username has too few characters, at least 3 characters.");
+            if(strlen($Password) < 6){
+                throw new RegisterModelException("Username has too few characters, at least 3 characters. <br/>Password has too few characters, at least 6 characters.");
+            }
+            throw new RegisterModelException("Username has too few characters, at least 3 characters.");
         }
         if(strlen($Password) < 6){
-            throw new Exception("Password has too few characters, at least 6 characters.");
+            throw new RegisterModelException("Password has too few characters, at least 6 characters.");
         }
-        
-        
-   
+
         return true;
     }
-    
-    
-    //returns the dbFile
-    public function getDataFile(){
-        return self::$dbFile;
-    }
 }
+
+
+/**
+ * Custom exceptions for code optimization in the controller.
+ */
+class RegisterModelException extends Exception
+{}
