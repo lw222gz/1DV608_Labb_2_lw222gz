@@ -21,6 +21,7 @@ class LoginController {
         $this -> rm = $rm;
     }
     
+    
     //Initiate function that checks for button clicks.
     public function init(){
         try {
